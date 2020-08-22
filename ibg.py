@@ -56,9 +56,6 @@ oa = np.array(o, dtype=np.uint8)
 oa = np.reshape(oa, (h,w))
 oa = np.flipud(oa)
 
-im = np.zeros((h,w,3), dtype=np.uint8)
-for i in range(h):
-    for j in range(w):
-        im[i,j,:]=palette[oa[i,j],0:3]
+im= palette[oa][:,:,0:3]
 
 plt.imsave(f.replace(".ibg",".png"),im)
