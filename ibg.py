@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import sys
 
-#f = "flagita1.ibg"
+# Seems a variant of PackBits
 f = sys.argv[1]
 
 fb = open(f,"rb").read()
@@ -10,7 +10,7 @@ fb = open(f,"rb").read()
 w = fb[18]+fb[19]*256
 h = fb[22]+fb[23]*256
 
-print(f"Format {w} x {h}")
+print(f"{f}: format {w} x {h}")
 
 psize = 256
 palette = np.zeros((psize,4), dtype=np.uint8)
@@ -25,31 +25,31 @@ for i in range(psize):
 
 istart = pstart + psize*4 
 
-with open(f+".ppm","wb") as ppm:
-    o=[]
-    ptr = istart
-    while True:
-        c = fb[ptr]
-        ptr = ptr+1
-        if c==0:
-            print(f"Done")
-            break
-        elif c<128:
-            # print(f"Emit sequence of {c}")
-            for _ in range(c):
-                c = fb[ptr]
-                ptr = ptr+1
-                o.append(c)
-        else:
-            rep = c-128
-            # print(f"Emit RLE of {rep}")
+o=[]
+ptr = istart
+while True:
+    c = fb[ptr]
+    ptr = ptr+1
+    if c==0:
+        break
+    elif c<128:
+        # print(f"Emit sequence of {c}")
+        for _ in range(c):
             c = fb[ptr]
             ptr = ptr+1
-            for _ in range(rep):
-                o.append(c)
+            o.append(c)
+    else:
+        rep = c-128
+        # print(f"Emit RLE of {rep}")
+        c = fb[ptr]
+        ptr = ptr+1
+        for _ in range(rep):
+            o.append(c)
 
 if len(o) != w*h:
-    raise Exception(f"Output {len(o)}, expected {w*h}")
+    raise Exception(f"{f}: output {len(o)}, expected {w*h}")
+else:
+    print(f"Done")
 
 
 oa = np.array(o, dtype=np.uint8)
