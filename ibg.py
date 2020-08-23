@@ -1,5 +1,4 @@
 import numpy as np
-import matplotlib.pyplot as plt
 import sys
 
 
@@ -57,16 +56,17 @@ def read_ibg(f):
     return oa, palette
 
 
+if __name__ == "__main__":
+    import matplotlib.pyplot as plt
+    f = sys.argv[1]
 
-f = sys.argv[1]
+    try:
+        oa, palette = read_ibg(f)
+        h, w = oa.shape
+        print(f"{f}: format {w} x {h}")
+        im= palette[oa][:,:,0:3]
+        plt.imsave(f.replace(".ibg",".png"),im)
 
-try:
-    oa, palette = read_ibg(f)
-    h, w = oa.shape
-    print(f"{f}: format {w} x {h}")
-    im= palette[oa][:,:,0:3]
-    plt.imsave(f.replace(".ibg",".png"),im)
-
-except:
-    print(f"{f}: failed")
+    except:
+        print(f"{f}: failed")
 
