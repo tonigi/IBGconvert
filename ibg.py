@@ -57,16 +57,17 @@ def read_ibg(f):
 
 
 if __name__ == "__main__":
-    import matplotlib.pyplot as plt
+    import png
     f = sys.argv[1]
 
     try:
         oa, palette = read_ibg(f)
         h, w = oa.shape
         print(f"{f}: format {w} x {h}")
-        im= palette[oa][:,:,0:3]
-        plt.imsave(f.replace(".ibg",".png"),im)
+        with open(f.replace(".ibg",".png"), "wb") as g:
+            pw = png.Writer(width=w, height=h, palette=palette[:,0:3])
+            pw.write(g, oa)
 
-    except:
-        print(f"{f}: failed")
+    except Exception as e:
+        print(f"{f}: failed: {e}")
 

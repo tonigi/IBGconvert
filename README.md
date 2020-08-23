@@ -10,5 +10,11 @@ related to this exhibition:
 > Gennaio - 7 Novembre, 1993.
 
 The format appears to be 8-bit RGB indexed, compressed with an
-algorithm analog to PackBits.  The format seems related to a Windows
-3.1 DLL named `ibg.dll`.
+algorithm analog to PackBits.  It seems related to a Windows 3.1 DLL
+named `ibg.dll`. 
+
+The reverse-engineered algorithm decodes to an equivalent indexed PNG
+using the `pypng` module. Succeeds with 950/959 files, so that there
+may still be some edge cases left.
+
+
