@@ -1,6 +1,6 @@
-# IBGconvert
+# IBG convert
 
-Converter for a long-lost IBG image format. 
+Reverse-engineered converter for a long-lost IBG image format. 
 
 To my knowledge it is only used in a "Invitation au voyage" CD-ROM
 related to this exhibition:
