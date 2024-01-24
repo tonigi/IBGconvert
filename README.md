@@ -21,3 +21,10 @@ using the `pypng` module. Succeeds with 950/959 files, so that there
 may still be some edge cases left. However, the missing files are not decoded
 by the native application, either.
 
+## Requirements
+
+The `pypng` [library](https://pypi.org/project/pypng/).
+
+## Usage
+
+    python ibg.py input.ibg
