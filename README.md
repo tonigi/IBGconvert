@@ -17,13 +17,13 @@ All of the available examples are 8-bit RGB indexed.
 The format seems related to a Windows 3.1 DLL named `ibg.dll`. 
 
 The reverse-engineered algorithm decodes to an equivalent indexed PNG
-using the `pypng` module. Succeeds with 950/959 files, so that there
+using Pillow. Succeeds with 950/959 files, so that there
 may still be some edge cases left. However, the missing files are not decoded
 by the native application, either.
 
 ## Requirements
 
-The `pypng` [library](https://pypi.org/project/pypng/).
+`numpy` and [Pillow](https://pypi.org/project/pillow/).
 
 ## Usage
 

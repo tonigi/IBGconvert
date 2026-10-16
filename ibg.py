@@ -57,16 +57,16 @@ def read_ibg(f):
 
 
 if __name__ == "__main__":
-    import png
+    from PIL import Image
     f = sys.argv[1]
 
     try:
         oa, palette = read_ibg(f)
         h, w = oa.shape
         print(f"{f}: format {w} x {h}")
-        with open(f.replace(".ibg",".png"), "wb") as g:
-            pw = png.Writer(width=w, height=h, palette=palette[:,0:3])
-            pw.write(g, oa)
+        img = Image.fromarray(oa)                    # 8-bit indices ("L")
+        img.putpalette(palette[:, 0:3].tobytes())    # becomes indexed ("P")
+        img.save(f.replace(".ibg", ".png"))
 
     except Exception as e:
         print(f"{f}: failed: {e}")
