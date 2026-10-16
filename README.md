@@ -42,9 +42,9 @@ Findings, documented at the top of `avs.py`:
 
 * **Video** is an early Indeo 2: same symbols and delta table as FFmpeg's
   `indeo2` decoder, but each frame defines its own code (8 group widths
-  of a unary-prefix + fixed-length code). Luma is stored at half the declared
-  width (128x240 for 256x240), so the output is rescaled to 320x240 (4:3).
-  Only intra frames have been seen.
+  of a unary-prefix + fixed-length code). A header flag marks luma stored
+  at half the declared width (128x240 for 256x240); either way the output is
+  rescaled to 320x240 (4:3). Only intra frames have been seen.
 * **Audio** is mono DVI/IMA ADPCM in blocks of 154/156 bytes, each with a
   2-byte header (step index, predictor high byte). Nibbles are packed in
   big-endian 16-bit words. The sample rate (31160 Hz for the sample file)

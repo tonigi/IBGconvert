@@ -12,9 +12,9 @@ RTV 2.0 video (an early Indeo 2):
     A code is a unary prefix k (k ones, then a zero) followed by width[k] bits;
     its index runs through the Indeo 2 symbol list (as in FFmpeg's indeo2data.h).
     Bits are read LSB-first. Planes Y, V, U are coded as in Indeo 2 intra frames
-    (first line absolute, then vertical deltas from table 0). Luma is stored at
-    half the width declared in the headers (128x240 for 256x240), chroma is
-    subsampled 4x4.
+    (first line absolute, then vertical deltas from table 0). Chroma is
+    subsampled 4x4. If bit 0x100 of the u16 at 0x10 is set, luma is stored at
+    half the width declared in the headers (128x240 for 256x240).
 
 ADPCM4E audio (DVI ADPCM, i.e. IMA ADPCM, 1 channel):
     The audio chunks form one continuous byte stream: 2 leading bytes, then
@@ -101,13 +101,15 @@ def _code_lut(widths):
     return lut
 
 
-def _decode_plane(buf, pos, lut, w, h):
+def _decode_plane(buf, pos, end, lut, w, h):
     out = np.empty((h, w), np.int16)
     row = [0] * w
     prev = None
     for y in range(h):
         x = 0
         while x < w:
+            if pos >= end:
+                raise ValueError("out of data")
             p = pos >> 3
             peek = (int.from_bytes(buf[p:p + 3], "little") >> (pos & 7)) & 0x3FFF
             e = lut[peek]
@@ -137,14 +139,16 @@ def _decode_plane(buf, pos, lut, w, h):
 
 def decode_video_frame(chunk):
     """Decode one RTV 2.0 frame to (Y, U, V) planes."""
-    h, w = struct.unpack_from("<HH", chunk, 0x0C)
-    w //= 2                                      # luma stored at half width
+    h, w, flags = struct.unpack_from("<HHH", chunk, 0x0C)
+    if flags & 0x100:                            # luma stored at half width
+        w //= 2
     buf = chunk + b"\0\0\0"
+    end = len(chunk) * 8
     lut = _code_lut(chunk[0x18:0x20])
     pos = 0x20 * 8
-    y, pos = _decode_plane(buf, pos, lut, w, h)
-    v, pos = _decode_plane(buf, pos, lut, w // 4, h // 4)
-    u, pos = _decode_plane(buf, pos, lut, w // 4, h // 4)
+    y, pos = _decode_plane(buf, pos, end, lut, w, h)
+    v, pos = _decode_plane(buf, pos, end, lut, w // 4, h // 4)
+    u, pos = _decode_plane(buf, pos, end, lut, w // 4, h // 4)
     return y, u, v
 
 
