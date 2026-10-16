@@ -31,6 +31,10 @@ The `pypng` [library](https://pypi.org/project/pypng/).
 
 # AVS (Intel DVI) convert
 
+> **Warning:** Claude generated on 16/10/2026. The AVS converter and this
+> section were reverse-engineered by Claude from two sample files and have
+> not been checked against Intel documentation.
+
 The same CD-ROM also carries `.AVS` video clips in Intel's DVI "AVSS"
 format (ActionMedia era), with RTV 2.0 video and "ADPCM4E" audio, which
 FFmpeg does not read. `avs.py` demuxes the file, decodes both streams and

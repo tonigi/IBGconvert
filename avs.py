@@ -1,5 +1,8 @@
 """Converter for Intel DVI "AVSS" (.AVS) files with RTV 2.0 video and ADPCM4E audio.
 
+WARNING: Claude generated on 16/10/2026. The format was reverse-engineered
+from two sample files and has not been checked against Intel documentation.
+
 Container (little-endian):
     file header      "IVDV" ... "SSVA", stream headers ("MRTS"), frame count
                      at 0x40, offset of first frame at 0x48
